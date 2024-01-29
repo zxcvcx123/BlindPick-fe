@@ -10,11 +10,13 @@ import {
 import IndexComponet from "./layout/IndexComponet";
 import { ChakraProvider } from "@chakra-ui/react";
 import Member from "./componets/member/Member";
+import MainIndex from "./componets/main/MainIndex";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
     // <Route path={"경로명"} element={보여줄 element 또는 컴포넌트}/>
     <Route path="/" element={<IndexComponet />}>
+      <Route index element={<MainIndex />} />
       <Route path="member" element={<Member />} />
     </Route>,
   ),
