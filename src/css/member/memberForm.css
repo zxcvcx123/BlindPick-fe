@@ -1,0 +1,47 @@
+/* 필수 입력 정보의 별*/
+.top_star {
+    font-size: 1.25rem;
+    color: red;
+    margin-right: 2px;
+}
+/* 필수 입력 정보 텍스트*/
+.top_text{
+    color: #afb0b2;
+}
+
+/* 회원가입 텍스트 */
+.top_title{
+    font-size: 1.75rem;
+}
+
+/* 회원가입 폼 텍스트 */
+.form_text{
+    font-size: 1.25rem;
+    color: #afb0b2;
+    margin-left: 5px;
+}
+/* 회원가입 폼 별 */
+.form_star{
+    font-size: 1.5rem;
+    color: red;
+    margin-left: 5px;
+}
+
+/* 회원가입 폼 텍스트 입력 박스 */
+.form_area{
+    display: flex;
+    align-items: center;
+    border: 1px #afb0b2 solid;
+    height: 70px;
+    margin-top: 10px;
+}
+
+/* 이메일 인증번호 */
+#form_code_email{
+    display: none;
+}
+
+/* 휴대전화 인증번호 */
+#form_code_phone{
+    display: none;
+}
