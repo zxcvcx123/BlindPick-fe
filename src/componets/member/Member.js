@@ -117,7 +117,7 @@ function Member(props) {
         <Flex>
           <Box
             className={"form_area"}
-            w={"92%"}
+            w={"100%"}
             onClick={(e) => formClick(e)}
             className={"form_area"}
           >
@@ -143,7 +143,7 @@ function Member(props) {
           {/* 표시 */}
           <Box
             className={"form_area"}
-            w={"160px"}
+            w={"180px"}
             justifyContent={"center"}
             border={"0px"}
           >
@@ -158,8 +158,7 @@ function Member(props) {
         </Flex>
 
         {/* 이메일 */}
-        {/* TODO: 여기서 부터 시작 */}
-        <Box className={"form_area"}>
+        <Box className={"form_area"} w={"100%"}>
           <Box display={"flex"} onClick={(e) => formClick(e)}>
             <label for="memberEmail" className={"form_text"}>
               이메일<span className={"form_star"}>*</span>
@@ -179,18 +178,19 @@ function Member(props) {
               />
             </Box>
           </Box>
-          <Button
-            borderLeft={"1px #afb0b2 solid"}
-            borderRadius={"0px"}
-            h={"68px"}
-            w={"159px"}
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            fontSize={"1.25rem"}
-          >
-            <Text>인증번호 전송</Text>
-          </Button>
+          <Box w={"159px"}>
+            <Button
+              borderLeft={"1px #afb0b2 solid"}
+              borderRadius={"0px"}
+              h={"68px"}
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              fontSize={"1.25rem"}
+            >
+              <Text>인증번호 전송</Text>
+            </Button>
+          </Box>
         </Box>
 
         <Box className={"form_area"} id={"form_code_email"}>
