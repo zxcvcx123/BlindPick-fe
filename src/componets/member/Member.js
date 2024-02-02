@@ -52,7 +52,7 @@ function Member(props) {
     }
   }
 
-  // 이름, 아이디, 비밀번호 클릭
+  // 이름, 아이디, 비밀번호, 이메일, 휴대전화번호 클릭
   function formClick(event) {
     const myDiv = event.currentTarget; // form 타이틀명
     const myDivChild = event.currentTarget.children; // form 자식들
@@ -65,22 +65,6 @@ function Member(props) {
 
     // Input 스타일
     myDivChild[1].style.cssText = "display: block; height: 32px";
-  }
-
-  // 이메일, 휴대전화번호 클릭
-  function formBtnClick(event) {
-    const myDiv = event.currentTarget; // form 타이틀명
-    const myDivChild = event.currentTarget.children; // form 자식들
-    const myDivChildToChild = myDivChild[0].children; // form 자식의 자식
-
-    // form 타이틀명 변환
-    myDivChild[0].style.cssText = "display: block;";
-
-    // form 제목 스타일
-    myDivChildToChild[0].style.cssText = "font-size: 1rem;";
-
-    // Input 스타일
-    myDivChildToChild[1].style.cssText = "display: block; height: 32px";
   }
 
   // 인증번호 전송
@@ -224,12 +208,14 @@ function Member(props) {
         </Flex>
 
         {/* 이메일 */}
-        <Box
-          className={"form_area"}
-          w={"100%"}
-          onClick={(e) => formBtnClick(e)}
-        >
-          <Box display={"flex"} alignItems={"center"} h={"100%"} w={"100%"}>
+        <Box className={"form_area"} w={"100%"}>
+          <Box
+            display={"flex"}
+            alignItems={"center"}
+            h={"100%"}
+            w={"100%"}
+            onClick={(e) => formClick(e)}
+          >
             <label for="memberEmail" className={"form_text"}>
               이메일<span className={"form_star"}>*</span>
             </label>
@@ -280,12 +266,14 @@ function Member(props) {
         </Box>
 
         {/* 휴대전화 번호 */}
-        <Box
-          className={"form_area"}
-          w={"100%"}
-          onClick={(e) => formBtnClick(e)}
-        >
-          <Box display={"flex"} alignItems={"center"} h={"100%"} w={"100%"}>
+        <Box className={"form_area"} w={"100%"}>
+          <Box
+            display={"flex"}
+            alignItems={"center"}
+            h={"100%"}
+            w={"100%"}
+            onClick={(e) => formClick(e)}
+          >
             <label for="memberPhone" className={"form_text"}>
               휴대전화번호<span className={"form_star"}>*</span>
             </label>
@@ -295,7 +283,7 @@ function Member(props) {
                 type="text"
                 h={"100%"}
                 textIndent={"5px"}
-                fontSize={"1rem"}
+                fontSize={"1.75rem"}
                 borderRadius={"0px"}
                 variant={"unstyled"}
                 border={"0px"}
