@@ -16,6 +16,10 @@ function Member(props) {
   const [memberBirth, setMemberBirth] = useState("");
   const [memberPhone, setMemberPhone] = useState("");
   const [pwCheckClick, setPwCheckClick] = useState(false);
+  const [emailCheckClick, setEmailCheckClick] = useState(false);
+  const [phoneCheckClick, setPhoneCheckClick] = useState(false);
+
+  // 가입하기
   function addMemberHandler() {
     axios
       .post("/member/save", {
@@ -77,6 +81,24 @@ function Member(props) {
 
     // Input 스타일
     myDivChildToChild[1].style.cssText = "display: block; height: 32px";
+  }
+
+  // 인증번호 전송
+  function checkBtnClickHandler(value) {
+    const mainFormLayout = document.getElementById("form_out_box");
+    let mainFormHeight = mainFormLayout.offsetHeight;
+    const codeEmail = document.getElementById("form_code_email");
+    const codePhone = document.getElementById("form_code_phone");
+
+    if (value === "email") {
+      codeEmail.style.cssText = "display: block";
+      mainFormLayout.style.height = mainFormHeight + 50 + "px";
+    }
+
+    if (value === "phone") {
+      codePhone.style.cssText = "display: block";
+      mainFormLayout.style.height = mainFormHeight + 50 + "px";
+    }
   }
 
   return (
@@ -235,16 +257,26 @@ function Member(props) {
               justifyContent={"center"}
               alignItems={"center"}
               fontSize={"1.25rem"}
+              data-value={"email"}
+              onClick={(e) =>
+                checkBtnClickHandler(e.currentTarget.getAttribute("data-value"))
+              }
             >
               <Text>인증번호 전송</Text>
             </Button>
           </Box>
         </Box>
 
-        <Box className={"form_area"} id={"form_code_email"}>
-          <Text className={"form_text"}>
-            메일 인증번호 입력<span className={"form_star"}>*</span>
-          </Text>
+        <Box className={"form_area"} id={"form_code_email"} h={"50px"}>
+          <Input
+            placeholder="메일 인증번호 입력"
+            h={"100%"}
+            textIndent={"5px"}
+            fontSize={"1rem"}
+            borderRadius={"0px"}
+            variant={"unstyled"}
+            border={"0px"}
+          />
         </Box>
 
         {/* 휴대전화 번호 */}
@@ -257,18 +289,17 @@ function Member(props) {
             <label for="memberPhone" className={"form_text"}>
               휴대전화번호<span className={"form_star"}>*</span>
             </label>
-            <Box display={"none"}>
+            <Box display={"none"} h={"50px"}>
               <Input
                 id="memberPhone"
                 type="text"
                 h={"100%"}
                 textIndent={"5px"}
-                fontSize={"1.75rem"}
+                fontSize={"1rem"}
                 borderRadius={"0px"}
                 variant={"unstyled"}
                 border={"0px"}
                 onChange={(e) => setMemberPhone(e.target.value)}
-                value={memberPhone}
               />
             </Box>
           </Box>
@@ -281,16 +312,26 @@ function Member(props) {
               justifyContent={"center"}
               alignItems={"center"}
               fontSize={"1.25rem"}
+              data-value={"phone"}
+              onClick={(e) =>
+                checkBtnClickHandler(e.currentTarget.getAttribute("data-value"))
+              }
             >
               <Text>인증번호 전송</Text>
             </Button>
           </Box>
         </Box>
 
-        <Box className={"form_area"} id={"form_code_phone"}>
-          <Text className={"form_text"}>
-            휴대전화 인증번호 입력<span className={"form_star"}>*</span>
-          </Text>
+        <Box className={"form_area"} id={"form_code_phone"} h={"50px"}>
+          <Input
+            placeholder="휴대전화 인증번호 입력"
+            h={"100%"}
+            textIndent={"5px"}
+            fontSize={"1rem"}
+            borderRadius={"0px"}
+            variant={"unstyled"}
+            border={"0px"}
+          />
         </Box>
       </Box>
     </Box>
