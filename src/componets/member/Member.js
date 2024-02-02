@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Box, Button, Flex, Input, Text, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Input,
+  Text,
+  Tooltip,
+} from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../css/member/memberForm.css";
@@ -86,241 +94,263 @@ function Member(props) {
   }
 
   return (
-    <Box
-      id={"form_out_box"}
-      border={"1px #afb0b2 solid"}
-      w={"80%"}
-      h={"500px"}
-      m={"50px auto"}
-    >
-      {/* TODO: 로고 및 소셜 로그인 넣기 */}
-      {/* 내부 회원가입 폼 시작 */}
-      <Box m={"20px 20px"}>
-        <Flex justifyContent={"space-between"}>
-          <Text className={"top_title"}>회원가입</Text>
-          <Flex alignItems={"flex-end"}>
-            <Text className="top_star">*</Text>
-            <Text className="top_text">필수 입력 정보입니다.</Text>
+    <Box>
+      <Box
+        id={"form_out_box"}
+        border={"1px #afb0b2 solid"}
+        w={"80%"}
+        h={"500px"}
+        m={"50px auto"}
+      >
+        {/* TODO: 로고 및 소셜 로그인 넣기 */}
+        {/* 내부 회원가입 폼 시작 */}
+        <Box m={"20px 20px"}>
+          <Flex justifyContent={"space-between"}>
+            <Text className={"top_title"}>회원가입</Text>
+            <Flex alignItems={"flex-end"}>
+              <Text className="top_star">*</Text>
+              <Text className="top_text">필수 입력 정보입니다.</Text>
+            </Flex>
           </Flex>
-        </Flex>
 
-        {/* 이름 */}
-        <Box onClick={(e) => formClick(e)} className={"form_area"}>
-          <label for="memberName" className={"form_text"}>
-            이름(실명)<span className={"form_star"}>*</span>
-          </label>
-          <Box display={"none"}>
-            <Input
-              id="memberName"
-              type="text"
-              h={"100%"}
-              textIndent={"5px"}
-              fontSize={"1.75rem"}
-              borderRadius={"0px"}
-              variant={"unstyled"}
-              border={"0px"}
-              onChange={(e) => setMemberName(e.target.value)}
-              value={memberName}
-            />
-          </Box>
-        </Box>
-
-        {/* 아이디 */}
-        <Box
-          className={"form_area"}
-          onClick={(e) => formClick(e)}
-          className={"form_area"}
-        >
-          <label for="memberId" className={"form_text"}>
-            아이디<span className={"form_star"}>*</span>
-          </label>
-          <Box display={"none"}>
-            <Input
-              id="memberId"
-              type="text"
-              h={"100%"}
-              textIndent={"5px"}
-              fontSize={"1.75rem"}
-              borderRadius={"0px"}
-              variant={"unstyled"}
-              border={"0px"}
-              onChange={(e) => setMemberId(e.target.value)}
-              value={memberId}
-            />
-          </Box>
-        </Box>
-
-        {/* 비밀번호 */}
-        <Flex>
-          <Box
-            className={"form_area"}
-            w={"100%"}
-            onClick={(e) => formClick(e)}
-            className={"form_area"}
-          >
-            <label for="memberPassword" className={"form_text"}>
-              비밀번호(8~16자의 영문,숫자,특수기호)
-              <span className={"form_star"}>*</span>
+          {/* 이름 */}
+          <Box onClick={(e) => formClick(e)} className={"form_area"}>
+            <label for="memberName" className={"form_text"}>
+              이름(실명)<span className={"form_star"}>*</span>
             </label>
             <Box display={"none"}>
               <Input
-                id="memberPassword"
-                type="password"
+                id="memberName"
+                type="text"
                 h={"100%"}
                 textIndent={"5px"}
                 fontSize={"1.75rem"}
                 borderRadius={"0px"}
                 variant={"unstyled"}
                 border={"0px"}
-                onChange={(e) => setMemberPassword(e.target.value)}
-                value={memberPassword}
+                onChange={(e) => setMemberName(e.target.value)}
+                value={memberName}
               />
             </Box>
           </Box>
-          {/* 표시 */}
+
+          {/* 아이디 */}
           <Box
             className={"form_area"}
-            w={"180px"}
-            justifyContent={"center"}
-            border={"0px"}
+            onClick={(e) => formClick(e)}
+            className={"form_area"}
           >
+            <label for="memberId" className={"form_text"}>
+              아이디<span className={"form_star"}>*</span>
+            </label>
+            <Box display={"none"}>
+              <Input
+                id="memberId"
+                type="text"
+                h={"100%"}
+                textIndent={"5px"}
+                fontSize={"1.75rem"}
+                borderRadius={"0px"}
+                variant={"unstyled"}
+                border={"0px"}
+                onChange={(e) => setMemberId(e.target.value)}
+                value={memberId}
+              />
+            </Box>
+          </Box>
+
+          {/* 비밀번호 */}
+          <Box className={"form_area"} w={"100%"}>
             <Box
-              className={"form_text"}
               display={"flex"}
               alignItems={"center"}
-              onClick={(e) => formPwView(e)}
+              h={"100%"}
+              w={"100%"}
+              borderRight={"1px solid #afb0b2"}
+              onClick={(e) => formClick(e)}
             >
-              {pwCheckClick === false && (
-                <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  style={{ color: "#afb0b2" }}
+              <label htmlFor="memberPassword" className={"form_text"}>
+                비밀번호(8~16자의 영문,숫자,특수기호)
+                <span className={"form_star"}>*</span>
+              </label>
+              <Box display={"none"}>
+                <Input
+                  id="memberPassword"
+                  type="password"
+                  h={"100%"}
+                  textIndent={"5px"}
+                  fontSize={"1.75rem"}
+                  borderRadius={"0px"}
+                  variant={"unstyled"}
+                  onChange={(e) => setMemberPassword(e.target.value)}
+                  value={memberPassword}
                 />
-              )}
-              {pwCheckClick === true && (
-                <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  style={{ color: "#4000ff" }}
+              </Box>
+            </Box>
+            <Box w={"180px"} display={"flex"} justifyContent={"center"}>
+              <Button
+                borderLeft={"0px"}
+                borderRadius={"0px"}
+                h={"68px"}
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                fontSize={"1.25rem"}
+                variant={"unstyled"}
+                value={pwCheckClick}
+                onClick={(e) => pwCheckClick(e)}
+              >
+                {pwCheckClick === false && (
+                  <FontAwesomeIcon
+                    icon={faCircleCheck}
+                    style={{ color: "#afb0b2" }}
+                  />
+                )}
+                {pwCheckClick === true && (
+                  <FontAwesomeIcon
+                    icon={faCircleCheck}
+                    style={{ color: "#4000ff" }}
+                  />
+                )}
+                <Text color={pwCheckClick === true && "blue"}>표시</Text>
+              </Button>
+            </Box>
+          </Box>
+
+          {/* 이메일 */}
+          <Box className={"form_area"} w={"100%"}>
+            <Box
+              display={"flex"}
+              alignItems={"center"}
+              h={"100%"}
+              w={"100%"}
+              onClick={(e) => formClick(e)}
+            >
+              <label for="memberEmail" className={"form_text"}>
+                이메일<span className={"form_star"}>*</span>
+              </label>
+              <Box display={"none"}>
+                <Input
+                  id="memberEmail"
+                  type="text"
+                  h={"100%"}
+                  textIndent={"5px"}
+                  fontSize={"1.75rem"}
+                  borderRadius={"0px"}
+                  variant={"unstyled"}
+                  border={"0px"}
+                  onChange={(e) => setMemberEmail(e.target.value)}
+                  value={memberEmail}
                 />
-              )}
-              <Text color={pwCheckClick === true && "blue"}>표시</Text>
+              </Box>
             </Box>
-          </Box>
-        </Flex>
-
-        {/* 이메일 */}
-        <Box className={"form_area"} w={"100%"}>
-          <Box
-            display={"flex"}
-            alignItems={"center"}
-            h={"100%"}
-            w={"100%"}
-            onClick={(e) => formClick(e)}
-          >
-            <label for="memberEmail" className={"form_text"}>
-              이메일<span className={"form_star"}>*</span>
-            </label>
-            <Box display={"none"}>
-              <Input
-                id="memberEmail"
-                type="text"
-                h={"100%"}
-                textIndent={"5px"}
-                fontSize={"1.75rem"}
+            <Box w={"180px"}>
+              <Button
+                borderLeft={"1px #afb0b2 solid"}
                 borderRadius={"0px"}
-                variant={"unstyled"}
-                border={"0px"}
-                onChange={(e) => setMemberEmail(e.target.value)}
-                value={memberEmail}
-              />
+                h={"68px"}
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                fontSize={"1.25rem"}
+                data-value={"email"}
+                onClick={(e) =>
+                  checkBtnClickHandler(
+                    e.currentTarget.getAttribute("data-value"),
+                  )
+                }
+              >
+                <Text>인증번호 전송</Text>
+              </Button>
             </Box>
           </Box>
-          <Box w={"159px"}>
-            <Button
-              borderLeft={"1px #afb0b2 solid"}
+
+          <Box className={"form_area"} id={"form_code_email"} h={"50px"}>
+            <Input
+              placeholder="메일 인증번호 입력"
+              h={"100%"}
+              textIndent={"5px"}
+              fontSize={"1rem"}
               borderRadius={"0px"}
-              h={"68px"}
-              display={"flex"}
-              justifyContent={"center"}
-              alignItems={"center"}
-              fontSize={"1.25rem"}
-              data-value={"email"}
-              onClick={(e) =>
-                checkBtnClickHandler(e.currentTarget.getAttribute("data-value"))
-              }
-            >
-              <Text>인증번호 전송</Text>
-            </Button>
+              variant={"unstyled"}
+              border={"0px"}
+            />
           </Box>
-        </Box>
 
-        <Box className={"form_area"} id={"form_code_email"} h={"50px"}>
-          <Input
-            placeholder="메일 인증번호 입력"
-            h={"100%"}
-            textIndent={"5px"}
-            fontSize={"1rem"}
-            borderRadius={"0px"}
-            variant={"unstyled"}
-            border={"0px"}
-          />
-        </Box>
-
-        {/* 휴대전화 번호 */}
-        <Box className={"form_area"} w={"100%"}>
-          <Box
-            display={"flex"}
-            alignItems={"center"}
-            h={"100%"}
-            w={"100%"}
-            onClick={(e) => formClick(e)}
-          >
-            <label for="memberPhone" className={"form_text"}>
-              휴대전화번호<span className={"form_star"}>*</span>
-            </label>
-            <Box display={"none"} h={"50px"}>
-              <Input
-                id="memberPhone"
-                type="text"
-                h={"100%"}
-                textIndent={"5px"}
-                fontSize={"1.75rem"}
+          {/* 휴대전화 번호 */}
+          <Box className={"form_area"} w={"100%"}>
+            <Box
+              display={"flex"}
+              alignItems={"center"}
+              h={"100%"}
+              w={"100%"}
+              onClick={(e) => formClick(e)}
+            >
+              <label for="memberPhone" className={"form_text"}>
+                휴대전화번호<span className={"form_star"}>*</span>
+              </label>
+              <Box display={"none"} h={"50px"}>
+                <Input
+                  id="memberPhone"
+                  type="text"
+                  h={"100%"}
+                  textIndent={"5px"}
+                  fontSize={"1.75rem"}
+                  borderRadius={"0px"}
+                  variant={"unstyled"}
+                  border={"0px"}
+                  onChange={(e) => setMemberPhone(e.target.value)}
+                />
+              </Box>
+            </Box>
+            <Box w={"180px"}>
+              <Button
+                borderLeft={"1px #afb0b2 solid"}
                 borderRadius={"0px"}
-                variant={"unstyled"}
-                border={"0px"}
-                onChange={(e) => setMemberPhone(e.target.value)}
-              />
+                h={"68px"}
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                fontSize={"1.25rem"}
+                data-value={"phone"}
+                onClick={(e) =>
+                  checkBtnClickHandler(
+                    e.currentTarget.getAttribute("data-value"),
+                  )
+                }
+              >
+                <Text>인증번호 전송</Text>
+              </Button>
             </Box>
           </Box>
-          <Box w={"159px"}>
-            <Button
-              borderLeft={"1px #afb0b2 solid"}
+
+          <Box className={"form_area"} id={"form_code_phone"} h={"50px"}>
+            <Input
+              placeholder="휴대전화 인증번호 입력"
+              h={"100%"}
+              textIndent={"5px"}
+              fontSize={"1rem"}
               borderRadius={"0px"}
-              h={"68px"}
-              display={"flex"}
-              justifyContent={"center"}
-              alignItems={"center"}
-              fontSize={"1.25rem"}
-              data-value={"phone"}
-              onClick={(e) =>
-                checkBtnClickHandler(e.currentTarget.getAttribute("data-value"))
-              }
-            >
-              <Text>인증번호 전송</Text>
-            </Button>
+              variant={"unstyled"}
+              border={"0px"}
+            />
           </Box>
         </Box>
-
-        <Box className={"form_area"} id={"form_code_phone"} h={"50px"}>
-          <Input
-            placeholder="휴대전화 인증번호 입력"
-            h={"100%"}
-            textIndent={"5px"}
-            fontSize={"1rem"}
-            borderRadius={"0px"}
-            variant={"unstyled"}
-            border={"0px"}
-          />
-        </Box>
+      </Box>
+      <Box
+        _hover={"cursor: pointer"}
+        border={"1px #3399ff solid"}
+        w={"80%"}
+        h={"80px"}
+        m={"-40px auto"}
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        backgroundColor={"#3399ff"}
+      >
+        <button style={{ width: "100%", height: "100%" }}>
+          <Heading color={"white"}>가입하기</Heading>
+        </button>
       </Box>
     </Box>
   );
