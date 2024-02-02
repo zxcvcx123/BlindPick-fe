@@ -14,6 +14,8 @@ function Member(props) {
   const [memberName, setMemberName] = useState("");
   const [memberEmail, setMemberEmail] = useState("");
   const [memberBirth, setMemberBirth] = useState("");
+  const [memberPhone, setMemberPhone] = useState("");
+  const [pwCheckClick, setPwCheckClick] = useState(false);
   function addMemberHandler() {
     axios
       .post("/member/save", {
@@ -31,6 +33,22 @@ function Member(props) {
       .finally();
   }
 
+  // 비밀번호 표시 버튼
+  function formPwView(event) {
+    const pwCheck = document.getElementById("memberPassword");
+
+    if (pwCheckClick === false) {
+      setPwCheckClick(true);
+      pwCheck.type = "text";
+    }
+
+    if (pwCheckClick === true) {
+      setPwCheckClick(false);
+      pwCheck.type = "password";
+    }
+  }
+
+  // 이름, 아이디, 비밀번호 클릭
   function formClick(event) {
     const myDiv = event.currentTarget; // form 타이틀명
     const myDivChild = event.currentTarget.children; // form 자식들
@@ -38,14 +56,27 @@ function Member(props) {
     // form 타이틀명 변환
     myDiv.style.cssText = "display: block;";
 
-    console.log(myDivChild[0]);
-    console.log(myDivChild[1]);
-
     // form 제목 스타일
     myDivChild[0].style.cssText = "font-size: 1rem;";
 
     // Input 스타일
     myDivChild[1].style.cssText = "display: block; height: 32px";
+  }
+
+  // 이메일, 휴대전화번호 클릭
+  function formBtnClick(event) {
+    const myDiv = event.currentTarget; // form 타이틀명
+    const myDivChild = event.currentTarget.children; // form 자식들
+    const myDivChildToChild = myDivChild[0].children; // form 자식의 자식
+
+    // form 타이틀명 변환
+    myDivChild[0].style.cssText = "display: block;";
+
+    // form 제목 스타일
+    myDivChildToChild[0].style.cssText = "font-size: 1rem;";
+
+    // Input 스타일
+    myDivChildToChild[1].style.cssText = "display: block; height: 32px";
   }
 
   return (
@@ -147,19 +178,36 @@ function Member(props) {
             justifyContent={"center"}
             border={"0px"}
           >
-            <Box className={"form_text"} display={"flex"} alignItems={"center"}>
-              <FontAwesomeIcon
-                icon={faCircleCheck}
-                style={{ borderColor: "#afb0b2" }}
-              />
-              <Text>표시</Text>
+            <Box
+              className={"form_text"}
+              display={"flex"}
+              alignItems={"center"}
+              onClick={(e) => formPwView(e)}
+            >
+              {pwCheckClick === false && (
+                <FontAwesomeIcon
+                  icon={faCircleCheck}
+                  style={{ color: "#afb0b2" }}
+                />
+              )}
+              {pwCheckClick === true && (
+                <FontAwesomeIcon
+                  icon={faCircleCheck}
+                  style={{ color: "#4000ff" }}
+                />
+              )}
+              <Text color={pwCheckClick === true && "blue"}>표시</Text>
             </Box>
           </Box>
         </Flex>
 
         {/* 이메일 */}
-        <Box className={"form_area"} w={"100%"}>
-          <Box display={"flex"} onClick={(e) => formClick(e)}>
+        <Box
+          className={"form_area"}
+          w={"100%"}
+          onClick={(e) => formBtnClick(e)}
+        >
+          <Box display={"flex"} alignItems={"center"} h={"100%"} w={"100%"}>
             <label for="memberEmail" className={"form_text"}>
               이메일<span className={"form_star"}>*</span>
             </label>
@@ -199,24 +247,44 @@ function Member(props) {
           </Text>
         </Box>
 
-        <Box className={"form_area"} justifyContent={"space-between"}>
-          <Flex>
-            <Text className={"form_text"}>
+        {/* 휴대전화 번호 */}
+        <Box
+          className={"form_area"}
+          w={"100%"}
+          onClick={(e) => formBtnClick(e)}
+        >
+          <Box display={"flex"} alignItems={"center"} h={"100%"} w={"100%"}>
+            <label for="memberPhone" className={"form_text"}>
               휴대전화번호<span className={"form_star"}>*</span>
-            </Text>
-          </Flex>
-          <Button
-            borderLeft={"1px #afb0b2 solid"}
-            borderRadius={"0px"}
-            h={"68px"}
-            w={"159px"}
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            fontSize={"1.25rem"}
-          >
-            <Text>인증번호 전송</Text>
-          </Button>
+            </label>
+            <Box display={"none"}>
+              <Input
+                id="memberPhone"
+                type="text"
+                h={"100%"}
+                textIndent={"5px"}
+                fontSize={"1.75rem"}
+                borderRadius={"0px"}
+                variant={"unstyled"}
+                border={"0px"}
+                onChange={(e) => setMemberPhone(e.target.value)}
+                value={memberPhone}
+              />
+            </Box>
+          </Box>
+          <Box w={"159px"}>
+            <Button
+              borderLeft={"1px #afb0b2 solid"}
+              borderRadius={"0px"}
+              h={"68px"}
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              fontSize={"1.25rem"}
+            >
+              <Text>인증번호 전송</Text>
+            </Button>
+          </Box>
         </Box>
 
         <Box className={"form_area"} id={"form_code_phone"}>
