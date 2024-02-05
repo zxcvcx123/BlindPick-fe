@@ -230,7 +230,17 @@ function Member(props) {
             >
               <label htmlFor="memberPassword" className={"form_text"}>
                 비밀번호(8~16자의 영문,숫자,특수기호)
-                <span className={"form_star"}>*</span>
+                <span className={"form_star"}>*</span>{" "}
+                {memberPassword.length > 0 && !memberPwRegex && (
+                  <span style={{ color: "#ed0202" }}>
+                    {" "}
+                    <FontAwesomeIcon
+                      icon={faTriangleExclamation}
+                      style={{ color: "#ed0202" }}
+                    />{" "}
+                    비밀번호 형식을 확인해주세요! (8~16자의 영문,숫자,특수기호)
+                  </span>
+                )}
               </label>
               <Box display={"none"}>
                 <Input
