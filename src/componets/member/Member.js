@@ -42,8 +42,7 @@ function Member(props) {
   const [memberEmailRegex, setMemberEmailRegex] = useState(false);
   const [memberPhoneRegex, setMemberPhoneRegex] = useState(false);
 
-  // 정규식 regexBox 경고창에 따라 제일 바깥 박스 높이 줄이고 늘리고
-  let regexBox = document.getElementsByClassName("regexBox");
+  // TODO: 인증번호 누르면 axios 전송 24/02/06 에 시작 예정
 
   // 가입하기
   function addMemberHandler() {
