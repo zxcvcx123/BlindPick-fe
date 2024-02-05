@@ -295,6 +295,16 @@ function Member(props) {
             >
               <label for="memberEmail" className={"form_text"}>
                 이메일<span className={"form_star"}>*</span>
+                {memberEmail.length > 0 && !memberEmailRegex && (
+                  <span style={{ color: "#ed0202" }}>
+                    {" "}
+                    <FontAwesomeIcon
+                      icon={faTriangleExclamation}
+                      style={{ color: "#ed0202" }}
+                    />{" "}
+                    올바른 이메일 형식을 확인해주세요!
+                  </span>
+                )}
               </label>
               <Box display={"none"}>
                 <Input
@@ -353,6 +363,16 @@ function Member(props) {
             >
               <label for="memberPhone" className={"form_text"}>
                 휴대전화번호<span className={"form_star"}>*</span>
+                {memberPhone.length > 0 && !memberPhoneRegex && (
+                  <span style={{ color: "#ed0202" }}>
+                    {" "}
+                    <FontAwesomeIcon
+                      icon={faTriangleExclamation}
+                      style={{ color: "#ed0202" }}
+                    />{" "}
+                    올바르지 못한 휴대전화번호 형식!( - 없이 작성)
+                  </span>
+                )}
               </label>
               <Box display={"none"} h={"50px"}>
                 <Input
