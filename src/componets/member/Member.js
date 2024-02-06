@@ -92,7 +92,7 @@ function Member(props) {
     myDivChild[1].style.cssText = "display: block; height: 32px";
   }
 
-  // 인증번호 전송
+  // 인증번호 전송클릭시 박스 크기 변동
   function checkBtnClickHandler(value) {
     // 제일 바깥 박스
     const mainFormLayout = document.getElementById("form_out_box");
@@ -110,6 +110,11 @@ function Member(props) {
       codePhone.style.cssText = "display: block";
       mainFormLayout.style.height = mainFormHeight + 50 + "px";
     }
+  }
+
+  // 이메일 인증번호 전송 로직
+  function checkEmailHandler() {
+    axios.post("/checkmail", { email: memberEmail }).then().catch().finally();
   }
 
   return (
@@ -176,7 +181,6 @@ function Member(props) {
                 variant={"unstyled"}
                 border={"0px"}
                 onChange={(e) => {
-                  console.log(regexBox.length);
                   setMemberName(e.target.value);
                 }}
                 value={memberName}
@@ -283,6 +287,7 @@ function Member(props) {
               </Button>
             </Box>
           </Box>
+
           {/* 이메일 */}
           <Box className={"form_area"} w={"100%"}>
             <Box
@@ -330,11 +335,12 @@ function Member(props) {
                 alignItems={"center"}
                 fontSize={"1.25rem"}
                 data-value={"email"}
-                onClick={(e) =>
+                onClick={(e) => {
                   checkBtnClickHandler(
                     e.currentTarget.getAttribute("data-value"),
-                  )
-                }
+                  );
+                  checkEmailHandler();
+                }}
               >
                 <Text>인증번호 전송</Text>
               </Button>
