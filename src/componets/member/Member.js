@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { createContext, useState } from "react";
 import {
   Box,
   Button,
@@ -12,7 +12,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../css/member/memberForm.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleCheck,
+  faTriangleExclamation,
+} from "@fortawesome/free-solid-svg-icons";
+import FormRegex from "./FormRegex";
+
+export const MemberRegexContext = createContext(null);
+
 function Member(props) {
   const navigate = useNavigate();
 
@@ -21,11 +28,21 @@ function Member(props) {
   const [checkPassword, setCheckPassword] = useState("");
   const [memberName, setMemberName] = useState("");
   const [memberEmail, setMemberEmail] = useState("");
-  const [memberBirth, setMemberBirth] = useState("");
   const [memberPhone, setMemberPhone] = useState("");
+
+  // 인증번호
   const [pwCheckClick, setPwCheckClick] = useState(false);
   const [emailCheckClick, setEmailCheckClick] = useState(false);
   const [phoneCheckClick, setPhoneCheckClick] = useState(false);
+
+  // 정규식 t/f
+  const [memberNameRegex, setMemberNameRegex] = useState(false);
+  const [memberIdRegex, setMemberIdRegex] = useState(false);
+  const [memberPwRegex, setMemberPwRegex] = useState(false);
+  const [memberEmailRegex, setMemberEmailRegex] = useState(false);
+  const [memberPhoneRegex, setMemberPhoneRegex] = useState(false);
+
+  // TODO: 인증번호 누르면 axios 전송 24/02/06 에 시작 예정
 
   // 가입하기
   function addMemberHandler() {
@@ -36,7 +53,7 @@ function Member(props) {
         checkPassword: checkPassword,
         memberName: memberName,
         memberEmail: memberEmail,
-        memberBirth: memberBirth,
+        memberPhone: memberPhone,
       })
       .then((res) => {
         console.log(res.data);
@@ -75,9 +92,11 @@ function Member(props) {
     myDivChild[1].style.cssText = "display: block; height: 32px";
   }
 
-  // 인증번호 전송
+  // 인증번호 전송클릭시 박스 크기 변동
   function checkBtnClickHandler(value) {
+    // 제일 바깥 박스
     const mainFormLayout = document.getElementById("form_out_box");
+    // 제일 바깥 박스 높이
     let mainFormHeight = mainFormLayout.offsetHeight;
     const codeEmail = document.getElementById("form_code_email");
     const codePhone = document.getElementById("form_code_phone");
@@ -93,8 +112,32 @@ function Member(props) {
     }
   }
 
+  // 이메일 인증번호 전송 로직
+  function checkEmailHandler() {
+    axios.post("/checkmail", { email: memberEmail }).then().catch().finally();
+  }
+
   return (
     <Box>
+      {/* 정규식 검증 */}
+      <MemberRegexContext.Provider
+        value={{
+          memberId,
+          memberPassword,
+          checkPassword,
+          memberName,
+          memberEmail,
+          memberPhone,
+          setMemberNameRegex,
+          setMemberIdRegex,
+          setMemberPwRegex,
+          setMemberEmailRegex,
+          setMemberPhoneRegex,
+        }}
+      >
+        <FormRegex />
+      </MemberRegexContext.Provider>
+      {/* ========== */}
       <Box
         id={"form_out_box"}
         border={"1px #afb0b2 solid"}
@@ -112,11 +155,20 @@ function Member(props) {
               <Text className="top_text">필수 입력 정보입니다.</Text>
             </Flex>
           </Flex>
-
           {/* 이름 */}
           <Box onClick={(e) => formClick(e)} className={"form_area"}>
             <label for="memberName" className={"form_text"}>
               이름(실명)<span className={"form_star"}>*</span>
+              {memberName.length > 0 && !memberNameRegex && (
+                <span style={{ color: "#ed0202" }}>
+                  {" "}
+                  <FontAwesomeIcon
+                    icon={faTriangleExclamation}
+                    style={{ color: "#ed0202" }}
+                  />{" "}
+                  이름 형식을 확인해주세요! (한글, 2~5글자)
+                </span>
+              )}
             </label>
             <Box display={"none"}>
               <Input
@@ -128,12 +180,13 @@ function Member(props) {
                 borderRadius={"0px"}
                 variant={"unstyled"}
                 border={"0px"}
-                onChange={(e) => setMemberName(e.target.value)}
+                onChange={(e) => {
+                  setMemberName(e.target.value);
+                }}
                 value={memberName}
               />
             </Box>
           </Box>
-
           {/* 아이디 */}
           <Box
             className={"form_area"}
@@ -141,7 +194,17 @@ function Member(props) {
             className={"form_area"}
           >
             <label for="memberId" className={"form_text"}>
-              아이디<span className={"form_star"}>*</span>
+              아이디<span className={"form_star"}>*</span>{" "}
+              {memberId.length > 0 && !memberIdRegex && (
+                <span style={{ color: "#ed0202" }}>
+                  {" "}
+                  <FontAwesomeIcon
+                    icon={faTriangleExclamation}
+                    style={{ color: "#ed0202" }}
+                  />{" "}
+                  아이디 형식을 확인해주세요! (6~20자리, 첫글자 숫자 X)
+                </span>
+              )}
             </label>
             <Box display={"none"}>
               <Input
@@ -166,12 +229,21 @@ function Member(props) {
               alignItems={"center"}
               h={"100%"}
               w={"100%"}
-              borderRight={"1px solid #afb0b2"}
               onClick={(e) => formClick(e)}
             >
               <label htmlFor="memberPassword" className={"form_text"}>
                 비밀번호(8~16자의 영문,숫자,특수기호)
-                <span className={"form_star"}>*</span>
+                <span className={"form_star"}>*</span>{" "}
+                {memberPassword.length > 0 && !memberPwRegex && (
+                  <span style={{ color: "#ed0202" }}>
+                    {" "}
+                    <FontAwesomeIcon
+                      icon={faTriangleExclamation}
+                      style={{ color: "#ed0202" }}
+                    />{" "}
+                    비밀번호 형식을 확인해주세요! (8~16자의 영문,숫자,특수기호)
+                  </span>
+                )}
               </label>
               <Box display={"none"}>
                 <Input
@@ -189,7 +261,6 @@ function Member(props) {
             </Box>
             <Box w={"180px"} display={"flex"} justifyContent={"center"}>
               <Button
-                borderLeft={"0px"}
                 borderRadius={"0px"}
                 h={"68px"}
                 display={"flex"}
@@ -198,7 +269,7 @@ function Member(props) {
                 fontSize={"1.25rem"}
                 variant={"unstyled"}
                 value={pwCheckClick}
-                onClick={(e) => pwCheckClick(e)}
+                onClick={(e) => formPwView(e)}
               >
                 {pwCheckClick === false && (
                   <FontAwesomeIcon
@@ -228,6 +299,16 @@ function Member(props) {
             >
               <label for="memberEmail" className={"form_text"}>
                 이메일<span className={"form_star"}>*</span>
+                {memberEmail.length > 0 && !memberEmailRegex && (
+                  <span style={{ color: "#ed0202" }}>
+                    {" "}
+                    <FontAwesomeIcon
+                      icon={faTriangleExclamation}
+                      style={{ color: "#ed0202" }}
+                    />{" "}
+                    올바른 이메일 형식을 확인해주세요!
+                  </span>
+                )}
               </label>
               <Box display={"none"}>
                 <Input
@@ -254,17 +335,17 @@ function Member(props) {
                 alignItems={"center"}
                 fontSize={"1.25rem"}
                 data-value={"email"}
-                onClick={(e) =>
+                onClick={(e) => {
                   checkBtnClickHandler(
                     e.currentTarget.getAttribute("data-value"),
-                  )
-                }
+                  );
+                  checkEmailHandler();
+                }}
               >
                 <Text>인증번호 전송</Text>
               </Button>
             </Box>
           </Box>
-
           <Box className={"form_area"} id={"form_code_email"} h={"50px"}>
             <Input
               placeholder="메일 인증번호 입력"
@@ -276,7 +357,6 @@ function Member(props) {
               border={"0px"}
             />
           </Box>
-
           {/* 휴대전화 번호 */}
           <Box className={"form_area"} w={"100%"}>
             <Box
@@ -288,6 +368,16 @@ function Member(props) {
             >
               <label for="memberPhone" className={"form_text"}>
                 휴대전화번호<span className={"form_star"}>*</span>
+                {memberPhone.length > 0 && !memberPhoneRegex && (
+                  <span style={{ color: "#ed0202" }}>
+                    {" "}
+                    <FontAwesomeIcon
+                      icon={faTriangleExclamation}
+                      style={{ color: "#ed0202" }}
+                    />{" "}
+                    올바르지 못한 휴대전화번호 형식!( - 없이 작성)
+                  </span>
+                )}
               </label>
               <Box display={"none"} h={"50px"}>
                 <Input
@@ -323,7 +413,6 @@ function Member(props) {
               </Button>
             </Box>
           </Box>
-
           <Box className={"form_area"} id={"form_code_phone"} h={"50px"}>
             <Input
               placeholder="휴대전화 인증번호 입력"
