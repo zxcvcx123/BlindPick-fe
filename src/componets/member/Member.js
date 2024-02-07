@@ -28,6 +28,7 @@ function Member(props) {
   const [checkPassword, setCheckPassword] = useState("");
   const [memberName, setMemberName] = useState("");
   const [memberEmail, setMemberEmail] = useState("");
+  const [checkEmailAuthNumber, setCheckEmailAuthNumber] = useState("");
   const [memberPhone, setMemberPhone] = useState("");
 
   // 인증번호
@@ -42,7 +43,7 @@ function Member(props) {
   const [memberEmailRegex, setMemberEmailRegex] = useState(false);
   const [memberPhoneRegex, setMemberPhoneRegex] = useState(false);
 
-  // TODO: 인증번호 누르면 axios 전송 24/02/06 에 시작 예정
+  // TODO: 인증번호 까지 맞아야 가입하기 됨 만들기
 
   // 가입하기
   function addMemberHandler() {
@@ -115,6 +116,18 @@ function Member(props) {
   // 이메일 인증번호 전송 로직
   function checkEmailHandler() {
     axios.post("/checkemail", { email: memberEmail }).then().catch().finally();
+  }
+
+  // 이메일 인증번호 확인 로직
+  function checkEmailAuthNumberHandler() {
+    axios
+      .post("/checkemailauth", {
+        email: memberEmail,
+        authNumber: checkEmailAuthNumber,
+      })
+      .then()
+      .catch()
+      .finally();
   }
 
   return (
@@ -325,7 +338,7 @@ function Member(props) {
                 />
               </Box>
             </Box>
-            <Box w={"180px"}>
+            <Box w={"175px"}>
               <Button
                 borderLeft={"1px #afb0b2 solid"}
                 borderRadius={"0px"}
@@ -347,15 +360,31 @@ function Member(props) {
             </Box>
           </Box>
           <Box className={"form_area"} id={"form_code_email"} h={"50px"}>
-            <Input
-              placeholder="메일 인증번호 입력"
-              h={"100%"}
-              textIndent={"5px"}
-              fontSize={"1rem"}
-              borderRadius={"0px"}
-              variant={"unstyled"}
-              border={"0px"}
-            />
+            <Flex alignItems={"center"} h={"100%"}>
+              <Input
+                placeholder="메일 인증번호 입력"
+                h={"100%"}
+                textIndent={"5px"}
+                fontSize={"1rem"}
+                borderRadius={"0px"}
+                variant={"unstyled"}
+                border={"0px"}
+                value={checkEmailAuthNumber}
+                onChange={(e) => setCheckEmailAuthNumber(e.target.value)}
+              />
+
+              <Button
+                background={"aqua"}
+                w={"140px"}
+                mr={"10px"}
+                borderRadius={"0px"}
+                variant={"unstyled"}
+                _hover={{ background: "#00e7ff" }}
+                onClick={() => checkEmailAuthNumberHandler()}
+              >
+                인증완료
+              </Button>
+            </Flex>
           </Box>
           {/* 휴대전화 번호 */}
           <Box className={"form_area"} w={"100%"}>
@@ -393,7 +422,7 @@ function Member(props) {
                 />
               </Box>
             </Box>
-            <Box w={"180px"}>
+            <Box w={"175px"}>
               <Button
                 borderLeft={"1px #afb0b2 solid"}
                 borderRadius={"0px"}
