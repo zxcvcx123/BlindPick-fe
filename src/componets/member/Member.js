@@ -114,7 +114,7 @@ function Member(props) {
 
   // 이메일 인증번호 전송 로직
   function checkEmailHandler() {
-    axios.post("/checkmail", { email: memberEmail }).then().catch().finally();
+    axios.post("/checkemail", { email: memberEmail }).then().catch().finally();
   }
 
   return (
