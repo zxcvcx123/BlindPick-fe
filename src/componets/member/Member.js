@@ -44,6 +44,9 @@ function Member(props) {
   const [memberEmailRegex, setMemberEmailRegex] = useState(false);
   const [memberPhoneRegex, setMemberPhoneRegex] = useState(false);
 
+  // 최종 가입하기
+  const [finalMemberCheck, setFinalMemberCheck] = useState(false);
+
   // TODO: 인증번호 까지 맞아야 가입하기 됨 만들기
 
   // 가입하기
@@ -103,12 +106,12 @@ function Member(props) {
     const codeEmail = document.getElementById("form_code_email");
     const codePhone = document.getElementById("form_code_phone");
 
-    if (value === "email") {
+    if (value === "email" && codeEmail.style.display !== "block") {
       codeEmail.style.cssText = "display: block";
       mainFormLayout.style.height = mainFormHeight + 50 + "px";
     }
 
-    if (value === "phone") {
+    if (value === "phone" && codePhone.style.display !== "block") {
       codePhone.style.cssText = "display: block";
       mainFormLayout.style.height = mainFormHeight + 50 + "px";
     }
