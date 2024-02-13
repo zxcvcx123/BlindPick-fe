@@ -17,6 +17,7 @@ import {
   faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import FormRegex from "./FormRegex";
+import { isDisabled } from "@testing-library/user-event/dist/utils";
 
 export const MemberRegexContext = createContext(null);
 
@@ -115,7 +116,11 @@ function Member(props) {
 
   // 이메일 인증번호 전송 로직
   function checkEmailHandler() {
-    axios.post("/checkemail", { email: memberEmail }).then().catch().finally();
+    axios
+      .post("/checkemail", { email: memberEmail })
+      .then((res) => {})
+      .catch((res) => {})
+      .finally();
   }
 
   // 이메일 인증번호 확인 로직
@@ -125,8 +130,19 @@ function Member(props) {
         email: memberEmail,
         authNumber: checkEmailAuthNumber,
       })
-      .then()
-      .catch()
+      .then((res) => {
+        console.log(res.status);
+        if (res.status === 200) {
+          setEmailCheckClick(true);
+        }
+      })
+      .catch((res) => {
+        // Spring에서 Error 보낼 때 방식 차이 때문에
+        // 에러코드 데이터 추출할 때 res.response.status 로 한번 더 꺼내써야함
+        if (res.response.status === 400) {
+          setEmailCheckClick(false);
+        }
+      })
       .finally();
   }
 
@@ -335,11 +351,13 @@ function Member(props) {
                   border={"0px"}
                   onChange={(e) => setMemberEmail(e.target.value)}
                   value={memberEmail}
+                  disabled={emailCheckClick && true}
                 />
               </Box>
             </Box>
             <Box w={"175px"}>
               <Button
+                id={"emailCheckAuthButton"}
                 borderLeft={"1px #afb0b2 solid"}
                 borderRadius={"0px"}
                 h={"68px"}
@@ -348,6 +366,7 @@ function Member(props) {
                 alignItems={"center"}
                 fontSize={"1.25rem"}
                 data-value={"email"}
+                isDisabled={emailCheckClick && true}
                 onClick={(e) => {
                   checkBtnClickHandler(
                     e.currentTarget.getAttribute("data-value"),
