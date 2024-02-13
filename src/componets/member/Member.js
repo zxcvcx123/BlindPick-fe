@@ -106,6 +106,7 @@ function Member(props) {
     const codeEmail = document.getElementById("form_code_email");
     const codePhone = document.getElementById("form_code_phone");
 
+    // 한번만 커지고 연속으로 누른 경우 변화 없게
     if (value === "email" && codeEmail.style.display !== "block") {
       codeEmail.style.cssText = "display: block";
       mainFormLayout.style.height = mainFormHeight + 50 + "px";
