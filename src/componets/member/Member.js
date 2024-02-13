@@ -7,6 +7,7 @@ import {
   Input,
   Text,
   Tooltip,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -47,25 +48,8 @@ function Member(props) {
   // 최종 가입하기
   const [finalMemberCheck, setFinalMemberCheck] = useState(false);
 
-  // TODO: 인증번호 까지 맞아야 가입하기 됨 만들기
-
-  // 가입하기
-  function addMemberHandler() {
-    axios
-      .post("/member/save", {
-        memberId: memberId,
-        memberPw: memberPassword,
-        checkPassword: checkPassword,
-        memberName: memberName,
-        memberEmail: memberEmail,
-        memberPhone: memberPhone,
-      })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch()
-      .finally();
-  }
+  // 알람용 팝업
+  const toast = useToast();
 
   // 비밀번호 표시 버튼
   function formPwView(event) {
@@ -148,6 +132,57 @@ function Member(props) {
         }
       })
       .finally();
+  }
+
+  // 모든 정규식 및 인증번호 통과해야 가입하기 버튼 누를 수 있음
+  // 가입하기
+  // TODO: 인증번호 까지 맞아야 가입하기 됨 만들기
+  // TODO: 토스트 까진 띄웠는데 여러개 안되어 있으면 여러개 동시에 토스트가 나옴 그걸 해결해야함 하나씩 나오게
+  function addMemberHandler() {
+    // 이름
+    if (!memberNameRegex) {
+      toast({
+        position: "top",
+        description: "이름 입력란을 확인해주세요.",
+        status: "info",
+      });
+      document.getElementById("memberName").focus();
+    }
+
+    // 아이디
+    if (!memberNameRegex) {
+      toast({
+        position: "top",
+        description: "아이디 입력란을 확인해주세요.",
+        status: "info",
+      });
+      document.getElementById("memberId").focus();
+    }
+
+    if (
+      memberNameRegex &&
+      memberIdRegex &&
+      memberPwRegex &&
+      memberEmailRegex &&
+      emailCheckClick &&
+      memberPhoneRegex &&
+      phoneCheckClick
+    ) {
+      axios
+        .post("/member/save", {
+          memberId: memberId,
+          memberPw: memberPassword,
+          checkPassword: checkPassword,
+          memberName: memberName,
+          memberEmail: memberEmail,
+          memberPhone: memberPhone,
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch()
+        .finally();
+    }
   }
 
   return (
@@ -489,7 +524,10 @@ function Member(props) {
         justifyContent={"center"}
         backgroundColor={"#3399ff"}
       >
-        <button style={{ width: "100%", height: "100%" }}>
+        <button
+          style={{ width: "100%", height: "100%" }}
+          onClick={() => addMemberHandler()}
+        >
           <Heading color={"white"}>가입하기</Heading>
         </button>
       </Box>
