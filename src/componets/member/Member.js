@@ -137,8 +137,8 @@ function Member(props) {
   // 모든 정규식 및 인증번호 통과해야 가입하기 버튼 누를 수 있음
   // 가입하기
   // TODO: 인증번호 까지 맞아야 가입하기 됨 만들기
-  // TODO: 토스트 까진 띄웠는데 여러개 안되어 있으면 여러개 동시에 토스트가 나옴 그걸 해결해야함 하나씩 나오게
   function addMemberHandler() {
+
     // 이름
     if (!memberNameRegex) {
       toast({
@@ -146,17 +146,57 @@ function Member(props) {
         description: "이름 입력란을 확인해주세요.",
         status: "info",
       });
-      document.getElementById("memberName").focus();
+      return document.getElementById("memberName").focus();
     }
 
     // 아이디
-    if (!memberNameRegex) {
+    if (!memberIdRegex) {
       toast({
         position: "top",
         description: "아이디 입력란을 확인해주세요.",
         status: "info",
       });
-      document.getElementById("memberId").focus();
+      return document.getElementById("memberId").focus();
+    }
+
+    // 비밀번호
+    if (!memberPwRegex) {
+      toast({
+        position: "top",
+        description: "패스워드 입력란을 확인해주세요.",
+        status: "info",
+      });
+      return document.getElementById("memberPassword").focus();
+    }
+
+    // 이메일
+    if (!memberEmailRegex) {
+      toast({
+        position: "top",
+        description: "이메일 입력란을 확인해주세요.",
+        status: "info",
+      });
+      return document.getElementById("memberEmail").focus();
+    }
+
+    // 이메일 인증번호
+    if (!emailCheckClick){
+      toast({
+        position: "top",
+        description: "이메일 인증번호를 확인해주세요.",
+        status: "info",
+      });
+      return document.getElementById("memberEmail").focus();
+    }
+
+    // 휴대전화번호
+    if (!memberPhoneRegex) {
+      toast({
+        position: "top",
+        description: "휴대전화번호 입력란을 확인해주세요.",
+        status: "info",
+      });
+      return document.getElementById("memberPhone").focus();
     }
 
     if (
@@ -183,6 +223,13 @@ function Member(props) {
         .catch()
         .finally();
     }
+  }
+
+  // 아이디 중복체크 (ID input에서 벗어날 때)
+  function checkId(){
+    axios.post("/member/checkid", {
+      id: memberId
+    })
   }
 
   return (
@@ -225,7 +272,7 @@ function Member(props) {
           </Flex>
           {/* 이름 */}
           <Box onClick={(e) => formClick(e)} className={"form_area"}>
-            <label for="memberName" className={"form_text"}>
+            <label htmlFor="memberName" className={"form_text"}>
               이름(실명)<span className={"form_star"}>*</span>
               {memberName.length > 0 && !memberNameRegex && (
                 <span style={{ color: "#ed0202" }}>
@@ -259,9 +306,8 @@ function Member(props) {
           <Box
             className={"form_area"}
             onClick={(e) => formClick(e)}
-            className={"form_area"}
           >
-            <label for="memberId" className={"form_text"}>
+            <label htmlFor="memberId" className={"form_text"}>
               아이디<span className={"form_star"}>*</span>{" "}
               {memberId.length > 0 && !memberIdRegex && (
                 <span style={{ color: "#ed0202" }}>
@@ -285,6 +331,7 @@ function Member(props) {
                 variant={"unstyled"}
                 border={"0px"}
                 onChange={(e) => setMemberId(e.target.value)}
+                onBlur={(e)=> checkId()}
                 value={memberId}
               />
             </Box>
@@ -365,7 +412,7 @@ function Member(props) {
               w={"100%"}
               onClick={(e) => formClick(e)}
             >
-              <label for="memberEmail" className={"form_text"}>
+              <label htmlFor="memberEmail" className={"form_text"}>
                 이메일<span className={"form_star"}>*</span>
                 {memberEmail.length > 0 && !memberEmailRegex && (
                   <span style={{ color: "#ed0202" }}>
@@ -444,30 +491,27 @@ function Member(props) {
               </Button>
             </Flex>
           </Box>
-          {/* 휴대전화 번호 */}
-          <Box className={"form_area"} w={"100%"}>
-            <Box
-              display={"flex"}
-              alignItems={"center"}
-              h={"100%"}
-              w={"100%"}
+
+          {/* 휴대전화 번호 (인증번호 없는 버전 */}
+          <Box
+              className={"form_area"}
               onClick={(e) => formClick(e)}
-            >
-              <label for="memberPhone" className={"form_text"}>
-                휴대전화번호<span className={"form_star"}>*</span>
-                {memberPhone.length > 0 && !memberPhoneRegex && (
+          >
+            <label htmlFor="memberPhone" className={"form_text"}>
+              휴대전화번호<span className={"form_star"}>*</span>{" "}
+              {memberPhone.length > 0 && !memberPhoneRegex && (
                   <span style={{ color: "#ed0202" }}>
                     {" "}
                     <FontAwesomeIcon
-                      icon={faTriangleExclamation}
-                      style={{ color: "#ed0202" }}
+                        icon={faTriangleExclamation}
+                        style={{ color: "#ed0202" }}
                     />{" "}
                     올바르지 못한 휴대전화번호 형식!( - 없이 작성)
                   </span>
-                )}
-              </label>
-              <Box display={"none"} h={"50px"}>
-                <Input
+              )}
+            </label>
+            <Box display={"none"}>
+              <Input
                   id="memberPhone"
                   type="text"
                   h={"100%"}
@@ -477,40 +521,78 @@ function Member(props) {
                   variant={"unstyled"}
                   border={"0px"}
                   onChange={(e) => setMemberPhone(e.target.value)}
-                />
-              </Box>
-            </Box>
-            <Box w={"175px"}>
-              <Button
-                borderLeft={"1px #afb0b2 solid"}
-                borderRadius={"0px"}
-                h={"68px"}
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                fontSize={"1.25rem"}
-                data-value={"phone"}
-                onClick={(e) =>
-                  checkBtnClickHandler(
-                    e.currentTarget.getAttribute("data-value"),
-                  )
-                }
-              >
-                <Text>인증번호 전송</Text>
-              </Button>
+                  value={memberPhone}
+              />
             </Box>
           </Box>
-          <Box className={"form_area"} id={"form_code_phone"} h={"50px"}>
-            <Input
-              placeholder="휴대전화 인증번호 입력"
-              h={"100%"}
-              textIndent={"5px"}
-              fontSize={"1rem"}
-              borderRadius={"0px"}
-              variant={"unstyled"}
-              border={"0px"}
-            />
-          </Box>
+
+          {/* 휴대전화 번호 (인증번호 있는 버전)*/}
+          {/*<Box className={"form_area"} w={"100%"}>*/}
+          {/*  <Box*/}
+          {/*    display={"flex"}*/}
+          {/*    alignItems={"center"}*/}
+          {/*    h={"100%"}*/}
+          {/*    w={"100%"}*/}
+          {/*    onClick={(e) => formClick(e)}*/}
+          {/*  >*/}
+          {/*    <label for="memberPhone" className={"form_text"}>*/}
+          {/*      휴대전화번호<span className={"form_star"}>*</span>*/}
+          {/*      {memberPhone.length > 0 && !memberPhoneRegex && (*/}
+          {/*        <span style={{ color: "#ed0202" }}>*/}
+          {/*          {" "}*/}
+          {/*          <FontAwesomeIcon*/}
+          {/*            icon={faTriangleExclamation}*/}
+          {/*            style={{ color: "#ed0202" }}*/}
+          {/*          />{" "}*/}
+          {/*          올바르지 못한 휴대전화번호 형식!( - 없이 작성)*/}
+          {/*        </span>*/}
+          {/*      )}*/}
+          {/*    </label>*/}
+          {/*    <Box display={"none"} h={"50px"}>*/}
+          {/*      <Input*/}
+          {/*        id="memberPhone"*/}
+          {/*        type="text"*/}
+          {/*        h={"100%"}*/}
+          {/*        textIndent={"5px"}*/}
+          {/*        fontSize={"1.75rem"}*/}
+          {/*        borderRadius={"0px"}*/}
+          {/*        variant={"unstyled"}*/}
+          {/*        border={"0px"}*/}
+          {/*        onChange={(e) => setMemberPhone(e.target.value)}*/}
+          {/*      />*/}
+          {/*    </Box>*/}
+          {/*  </Box>*/}
+          {/*  <Box w={"175px"}>*/}
+          {/*    <Button*/}
+          {/*      borderLeft={"1px #afb0b2 solid"}*/}
+          {/*      borderRadius={"0px"}*/}
+          {/*      h={"68px"}*/}
+          {/*      display={"flex"}*/}
+          {/*      justifyContent={"center"}*/}
+          {/*      alignItems={"center"}*/}
+          {/*      fontSize={"1.25rem"}*/}
+          {/*      data-value={"phone"}*/}
+          {/*      onClick={(e) =>*/}
+          {/*        checkBtnClickHandler(*/}
+          {/*          e.currentTarget.getAttribute("data-value"),*/}
+          {/*        )*/}
+          {/*      }*/}
+          {/*    >*/}
+          {/*      <Text>인증번호 전송</Text>*/}
+          {/*    </Button>*/}
+          {/*  </Box>*/}
+          {/*</Box>*/}
+          {/*<Box className={"form_area"} id={"form_code_phone"} h={"50px"}>*/}
+          {/*  <Input*/}
+          {/*    placeholder="휴대전화 인증번호 입력"*/}
+          {/*    h={"100%"}*/}
+          {/*    textIndent={"5px"}*/}
+          {/*    fontSize={"1rem"}*/}
+          {/*    borderRadius={"0px"}*/}
+          {/*    variant={"unstyled"}*/}
+          {/*    border={"0px"}*/}
+          {/*  />*/}
+          {/*</Box>*/}
         </Box>
       </Box>
       <Box
